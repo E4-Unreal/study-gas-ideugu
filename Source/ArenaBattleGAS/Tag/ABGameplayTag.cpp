@@ -15,4 +15,13 @@ namespace ABGameplayTags
             UE_DEFINE_GAMEPLAY_TAG(Rotating, "Actor.State.Rotating")
         }
     }
+
+    namespace Character
+    {
+        namespace State
+        {
+            UE_DEFINE_GAMEPLAY_TAG(Jumping, "Character.State.Jumping")
+            UE_DEFINE_GAMEPLAY_TAG(Attacking, "Character.State.Attacking")
+        }
+    }
 }

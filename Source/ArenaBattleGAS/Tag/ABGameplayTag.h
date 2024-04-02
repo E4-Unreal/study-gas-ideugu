@@ -16,4 +16,13 @@ namespace ABGameplayTags
             UE_DECLARE_GAMEPLAY_TAG_EXTERN(Rotating)
         }
     }
+
+    namespace Character
+    {
+        namespace State
+        {
+            UE_DECLARE_GAMEPLAY_TAG_EXTERN(Jumping)
+            UE_DECLARE_GAMEPLAY_TAG_EXTERN(Attacking)
+        }
+    }
 }
