@@ -3,6 +3,10 @@
 
 #include "ABGA_AttackHitCheck.h"
 
+#include "AbilitySystemBlueprintLibrary.h"
+#include "AT/ABAT_WaitForTrace.h"
+#include "TA/ABTA_Trace.h"
+
 UABGA_AttackHitCheck::UABGA_AttackHitCheck()
 {
     InstancingPolicy = EGameplayAbilityInstancingPolicy::InstancedPerActor;
@@ -14,7 +18,19 @@ void UABGA_AttackHitCheck::ActivateAbility(const FGameplayAbilitySpecHandle Hand
 {
     Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
 
-    UE_LOG(LogTemp, Error, TEXT("HitCheck"))
+    UABAT_WaitForTrace* WaitForTraceTask = UABAT_WaitForTrace::CreateTask(this, AABTA_Trace::StaticClass());
+    WaitForTraceTask->OnComplete.AddDynamic(this, &ThisClass::OnTraceResultCallBack);
+    WaitForTraceTask->ReadyForActivation();
+}
+
+void UABGA_AttackHitCheck::OnTraceResultCallBack(const FGameplayAbilityTargetDataHandle& TargetDataHandle)
+{
+    if(UAbilitySystemBlueprintLibrary::TargetDataHasHitResult(TargetDataHandle, 0))
+    {
+        FHitResult HitResult = UAbilitySystemBlueprintLibrary::GetHitResultFromTargetData(TargetDataHandle, 0);
+
+        UE_LOG(LogTemp, Error, TEXT("Target %s Detected"), *(HitResult.GetActor()->GetName()))
+    }
 
     bool bReplicatedEndAbility = true;
     bool bWasCancelled = true;
