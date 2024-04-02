@@ -6,6 +6,15 @@
 #include "EnhancedInputComponent.h"
 #include "Player/ABGASPlayerState.h"
 
+AABGASPlayerCharacter::AABGASPlayerCharacter()
+{
+    static ConstructorHelpers::FObjectFinder<UAnimMontage> ComboActionMontageRef(TEXT("/Script/Engine.AnimMontage'/Game/ArenaBattleGAS/Animation/AM_ComboAttack.AM_ComboAttack'"));
+    if (ComboActionMontageRef.Object)
+    {
+    	ComboActionMontage = ComboActionMontageRef.Object;
+    }
+}
+
 void AABGASPlayerCharacter::PossessedBy(AController* NewController)
 {
     Super::PossessedBy(NewController);
@@ -46,5 +55,6 @@ void AABGASPlayerCharacter::SetupGasInputComponent()
 
         EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Triggered, AbilitySystem.Get(), &UAbilitySystemComponent::PressInputID, 0);
         EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Completed, AbilitySystem.Get(), &UAbilitySystemComponent::ReleaseInputID, 0);
+        EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Triggered, AbilitySystem.Get(), &UAbilitySystemComponent::PressInputID, 1);
     }
 }

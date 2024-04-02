@@ -22,6 +22,8 @@ protected:
     TArray<TSubclassOf<UGameplayAbility>> DefaultAbilities;
 
 public:
+    AABGASPlayerCharacter();
+
     virtual void PossessedBy(AController* NewController) override;
     virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
 
