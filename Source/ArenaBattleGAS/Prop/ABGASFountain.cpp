@@ -3,8 +3,8 @@
 #include "ABGASFountain.h"
 
 #include "AbilitySystemComponent.h"
-#include "GA/ABGA_Rotate.h"
 #include "GameFramework/RotatingMovementComponent.h"
+#include "Tag/ABGameplayTag.h"
 
 AABGASFountain::AABGASFountain()
 {
@@ -20,9 +20,14 @@ void AABGASFountain::PostInitializeComponents()
     RotatingMovement->bAutoActivate = false;
     RotatingMovement->Deactivate();
 
-    // ASC 초기화 및 GA 부여
+    // ASC 초기화
     AbilitySystem->InitAbilityActorInfo(this, this);
-    AbilitySystem->GiveAbility(AbilitySystem->BuildAbilitySpecFromClass(UABGA_Rotate::StaticClass()));
+
+    // 기본 GA 부여
+    for(const auto& DefaultAbility : DefaultAbilities)
+    {
+        AbilitySystem->GiveAbility(AbilitySystem->BuildAbilitySpecFromClass(DefaultAbility));
+    }
 }
 
 void AABGASFountain::BeginPlay()
@@ -34,11 +39,11 @@ void AABGASFountain::BeginPlay()
 
 void AABGASFountain::TimerAction()
 {
-    if(FGameplayAbilitySpec* RotateSpec = AbilitySystem->FindAbilitySpecFromClass(UABGA_Rotate::StaticClass()))
-    {
-        if(RotateSpec->IsActive())
-            AbilitySystem->CancelAbilityHandle(RotateSpec->Handle);
-        else
-            AbilitySystem->TryActivateAbility(RotateSpec->Handle);
-    }
+    using namespace ABGameplayTags::Actor;
+
+    const FGameplayTagContainer TargetTag(Action::Rotate);
+    if(!AbilitySystem->HasMatchingGameplayTag(State::Rotating))
+        AbilitySystem->TryActivateAbilitiesByTag(TargetTag);
+    else
+        AbilitySystem->CancelAbilities(&TargetTag);
 }

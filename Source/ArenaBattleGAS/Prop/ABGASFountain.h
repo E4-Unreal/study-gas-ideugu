@@ -7,6 +7,7 @@
 #include "Prop/ABFountain.h"
 #include "ABGASFountain.generated.h"
 
+class UGameplayAbility;
 class UAbilitySystemComponent;
 class URotatingMovementComponent;
 
@@ -21,6 +22,9 @@ protected:
 
     UPROPERTY(VisibleAnywhere, Category = "Component")
     TObjectPtr<UAbilitySystemComponent> AbilitySystem;
+
+    UPROPERTY(EditAnywhere, Category = "Config")
+    TArray<TSubclassOf<UGameplayAbility>> DefaultAbilities;
 
     UPROPERTY(EditAnywhere, Category = "Config")
     float ActionPeriod;
