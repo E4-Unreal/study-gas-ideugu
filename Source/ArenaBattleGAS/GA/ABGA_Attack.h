@@ -6,6 +6,7 @@
 #include "Abilities/GameplayAbility.h"
 #include "ABGA_Attack.generated.h"
 
+class UCharacterMovementComponent;
 class AABCharacterBase;
 /**
  *
@@ -16,6 +17,7 @@ class ARENABATTLEGAS_API UABGA_Attack : public UGameplayAbility
     GENERATED_BODY()
 
     TWeakObjectPtr<AABCharacterBase> AvatarCharacter;
+    TWeakObjectPtr<UCharacterMovementComponent> CharacterMovement;
 
 public:
     UABGA_Attack();

@@ -4,7 +4,7 @@
 
 #include "Abilities/Tasks/AbilityTask_PlayMontageAndWait.h"
 #include "Character/ABCharacterBase.h"
-#include "GameFramework/Character.h"
+#include "GameFramework/CharacterMovementComponent.h"
 
 
 UABGA_Attack::UABGA_Attack()
@@ -17,7 +17,11 @@ void UABGA_Attack::OnAvatarSet(const FGameplayAbilityActorInfo* ActorInfo, const
     Super::OnAvatarSet(ActorInfo, Spec);
 
     // 레퍼런스 캐싱
-    AvatarCharacter = CastChecked<AABCharacterBase>(GetAvatarActorFromActorInfo());
+    AvatarCharacter = Cast<AABCharacterBase>(GetAvatarActorFromActorInfo());
+    CharacterMovement = AvatarCharacter->GetCharacterMovement();
+
+    check(AvatarCharacter.Get())
+    check(CharacterMovement.Get())
 }
 
 void UABGA_Attack::ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo,
@@ -25,7 +29,10 @@ void UABGA_Attack::ActivateAbility(const FGameplayAbilitySpecHandle Handle, cons
 {
     Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
 
-    // 어빌리티 태스크 생성
+    // 캐릭터 정지
+    CharacterMovement->SetMovementMode(MOVE_None);
+
+    // 몽타주 재생 어빌리티 태스크 생성 및 실행
     UAbilityTask_PlayMontageAndWait* PlayAttackTask = UAbilityTask_PlayMontageAndWait::CreatePlayMontageAndWaitProxy(this, TEXT("PlayAttack"), AvatarCharacter->GetComboActionMontage());
     PlayAttackTask->OnCompleted.AddDynamic(this, &ThisClass::OnCompleted_Event);
     PlayAttackTask->OnInterrupted.AddDynamic(this, &ThisClass::OnInterrupted_Event);
@@ -48,6 +55,9 @@ void UABGA_Attack::EndAbility(const FGameplayAbilitySpecHandle Handle, const FGa
     const FGameplayAbilityActivationInfo ActivationInfo, bool bReplicateEndAbility, bool bWasCancelled)
 {
     Super::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility, bWasCancelled);
+
+    // 캐릭터 정지
+    CharacterMovement->SetMovementMode(MOVE_Walking);
 }
 
 void UABGA_Attack::OnCompleted_Event()
