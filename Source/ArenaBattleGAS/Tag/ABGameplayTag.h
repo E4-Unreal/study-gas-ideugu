@@ -19,6 +19,11 @@ namespace ABGameplayTags
 
     namespace Character
     {
+        namespace Action
+        {
+            UE_DECLARE_GAMEPLAY_TAG_EXTERN(AttackHitCheck)
+        }
+
         namespace State
         {
             UE_DECLARE_GAMEPLAY_TAG_EXTERN(Jumping)
