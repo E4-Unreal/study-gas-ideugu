@@ -2,11 +2,14 @@
 
 #include "ABGASFountain.h"
 
+#include "AbilitySystemComponent.h"
+#include "GA/ABGA_Rotate.h"
 #include "GameFramework/RotatingMovementComponent.h"
 
 AABGASFountain::AABGASFountain()
 {
     RotatingMovement = CreateDefaultSubobject<URotatingMovementComponent>(TEXT("RotatingMovement"));
+    AbilitySystem = CreateDefaultSubobject<UAbilitySystemComponent>(TEXT("AbilitySystem"));
     ActionPeriod = 3.f;
 }
 
@@ -16,6 +19,10 @@ void AABGASFountain::PostInitializeComponents()
 
     RotatingMovement->bAutoActivate = false;
     RotatingMovement->Deactivate();
+
+    // ASC 초기화 및 GA 부여
+    AbilitySystem->InitAbilityActorInfo(this, this);
+    AbilitySystem->GiveAbility(AbilitySystem->BuildAbilitySpecFromClass(UABGA_Rotate::StaticClass()));
 }
 
 void AABGASFountain::BeginPlay()
@@ -27,8 +34,11 @@ void AABGASFountain::BeginPlay()
 
 void AABGASFountain::TimerAction()
 {
-    if(!RotatingMovement->IsActive())
-        RotatingMovement->Activate(true);
-    else
-        RotatingMovement->Deactivate();
+    if(FGameplayAbilitySpec* RotateSpec = AbilitySystem->FindAbilitySpecFromClass(UABGA_Rotate::StaticClass()))
+    {
+        if(RotateSpec->IsActive())
+            AbilitySystem->CancelAbilityHandle(RotateSpec->Handle);
+        else
+            AbilitySystem->TryActivateAbility(RotateSpec->Handle);
+    }
 }
