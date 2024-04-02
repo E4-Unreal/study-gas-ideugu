@@ -21,6 +21,9 @@ protected:
     UPROPERTY(EditAnywhere, Category = "Config")
     TArray<TSubclassOf<UGameplayAbility>> DefaultAbilities;
 
+    UPROPERTY(EditAnywhere, Category = "Config")
+    TMap<int32, TSubclassOf<UGameplayAbility>> DefaultInputAbilities;
+
 public:
     AABGASPlayerCharacter();
 

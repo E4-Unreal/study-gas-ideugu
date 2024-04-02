@@ -28,14 +28,18 @@ void AABGASPlayerCharacter::PossessedBy(AController* NewController)
         AbilitySystem->InitAbilityActorInfo(PS, this);
 
         // 기본 GA 부여
-        int32 InputID = 0;
         for(const auto& DefaultAbility : DefaultAbilities)
         {
             FGameplayAbilitySpec GameplayAbilitySpec = AbilitySystem->BuildAbilitySpecFromClass(DefaultAbility);
-            GameplayAbilitySpec.InputID = InputID;
             AbilitySystem->GiveAbility(GameplayAbilitySpec);
+        }
 
-            InputID++;
+        // 기본 입력 GA 부여
+        for (const auto& [DefaultInputID, DefaultAbility] : DefaultInputAbilities)
+        {
+            FGameplayAbilitySpec GameplayAbilitySpec = AbilitySystem->BuildAbilitySpecFromClass(DefaultAbility);
+            GameplayAbilitySpec.InputID = DefaultInputID;
+            AbilitySystem->GiveAbility(GameplayAbilitySpec);
         }
     }
 }
