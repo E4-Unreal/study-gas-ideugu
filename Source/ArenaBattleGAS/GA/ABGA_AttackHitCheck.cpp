@@ -33,18 +33,11 @@ void UABGA_AttackHitCheck::OnTraceResultCallBack(const FGameplayAbilityTargetDat
 
         UE_LOG(LogTemp, Error, TEXT("Target %s Detected"), *(HitResult.GetActor()->GetName()))
 
-        // ASC 가져오기
-        UAbilitySystemComponent* SourceASC = GetAbilitySystemComponentFromActorInfo_Checked();
-        UAbilitySystemComponent* TargetASC = UAbilitySystemGlobals::GetAbilitySystemComponentFromActor(HitResult.GetActor());
-        if(!TargetASC) return;
-
-        // Attribute 가져오기
-        const UABGASCharacterAttributeSet* SourceAttribute = SourceASC->GetSet<UABGASCharacterAttributeSet>();
-        UABGASCharacterAttributeSet* TargetAttribute = const_cast<UABGASCharacterAttributeSet*>(TargetASC->GetSet<UABGASCharacterAttributeSet>());
-        if(!SourceAttribute || !TargetAttribute) return;
-
-        const float AttackDamage = SourceAttribute->GetAttackRate();
-        TargetAttribute->SetHealth(TargetAttribute->GetHealth() - AttackDamage);
+        FGameplayEffectSpecHandle EffectSpecHandle = MakeOutgoingGameplayEffectSpec(AttackDamageEffect);
+        if(EffectSpecHandle.IsValid())
+        {
+            ApplyGameplayEffectSpecToTarget(CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo, EffectSpecHandle, TargetDataHandle);
+        }
     }
 
     bool bReplicatedEndAbility = true;

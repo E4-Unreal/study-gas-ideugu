@@ -14,6 +14,10 @@ class ARENABATTLEGAS_API UABGA_AttackHitCheck : public UGameplayAbility
 {
     GENERATED_BODY()
 
+protected:
+    UPROPERTY(EditDefaultsOnly, Category = "Config")
+    TSubclassOf<UGameplayEffect> AttackDamageEffect;
+
 public:
     UABGA_AttackHitCheck();
 
