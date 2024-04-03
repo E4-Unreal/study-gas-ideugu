@@ -19,6 +19,9 @@ protected:
     UPROPERTY(EditAnywhere)
     FGameplayTag TriggerTag;
 
+    UPROPERTY(EditAnywhere)
+    float ComboAttackLevel;
+
 public:
     UAnimNotify_GASAttackHitCheck();
 

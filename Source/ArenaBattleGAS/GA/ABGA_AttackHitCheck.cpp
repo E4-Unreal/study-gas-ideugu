@@ -21,6 +21,9 @@ void UABGA_AttackHitCheck::ActivateAbility(const FGameplayAbilitySpecHandle Hand
 {
     Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
 
+    // 콤보 공격 레벨 지정
+    CurrentLevel = TriggerEventData->EventMagnitude;
+
     UABAT_WaitForTrace* WaitForTraceTask = UABAT_WaitForTrace::CreateTask(this, AABTA_Trace::StaticClass());
     WaitForTraceTask->OnComplete.AddDynamic(this, &ThisClass::OnTraceResultCallBack);
     WaitForTraceTask->ReadyForActivation();
@@ -36,7 +39,7 @@ void UABGA_AttackHitCheck::OnTraceResultCallBack(const FGameplayAbilityTargetDat
 
         const UABGASCharacterAttributeSet* SourceAttribute = GetAbilitySystemComponentFromActorInfo_Checked()->GetSet<UABGASCharacterAttributeSet>();
 
-        FGameplayEffectSpecHandle EffectSpecHandle = MakeOutgoingGameplayEffectSpec(AttackDamageEffect);
+        FGameplayEffectSpecHandle EffectSpecHandle = MakeOutgoingGameplayEffectSpec(AttackDamageEffect, CurrentLevel);
         if(EffectSpecHandle.IsValid())
         {
             EffectSpecHandle.Data->SetSetByCallerMagnitude(ABGameplayTags::Data::Damage, -SourceAttribute->GetAttackRate());

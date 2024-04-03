@@ -18,6 +18,8 @@ protected:
     UPROPERTY(EditDefaultsOnly, Category = "Config")
     TSubclassOf<UGameplayEffect> AttackDamageEffect;
 
+    float CurrentLevel;
+
 public:
     UABGA_AttackHitCheck();
 
