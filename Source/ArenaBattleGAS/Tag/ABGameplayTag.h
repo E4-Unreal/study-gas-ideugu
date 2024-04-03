@@ -33,6 +33,7 @@ namespace ABGameplayTags
         {
             UE_DECLARE_GAMEPLAY_TAG_EXTERN(Jumping)
             UE_DECLARE_GAMEPLAY_TAG_EXTERN(Attacking)
+            UE_DECLARE_GAMEPLAY_TAG_EXTERN(Dead)
         }
     }
 }

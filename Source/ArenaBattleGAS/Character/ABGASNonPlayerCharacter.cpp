@@ -31,6 +31,7 @@ void AABGASNonPlayerCharacter::PossessedBy(AController* NewController)
 
     // ASC 초기화
     AbilitySystem->InitAbilityActorInfo(this, this);
+    CharacterAttributeSet->OnOutOfHealth.AddDynamic(this, &ThisClass::OnOutOfHealthCallBack);
 
     FGameplayEffectContextHandle EffectContextHandle = AbilitySystem->MakeEffectContext();
     EffectContextHandle.AddSourceObject(this);
@@ -40,4 +41,9 @@ void AABGASNonPlayerCharacter::PossessedBy(AController* NewController)
     {
         AbilitySystem->ApplyGameplayEffectSpecToSelf(*EffectSpecHandle.Data.Get());
     }
+}
+
+void AABGASNonPlayerCharacter::OnOutOfHealthCallBack()
+{
+    SetDead();
 }

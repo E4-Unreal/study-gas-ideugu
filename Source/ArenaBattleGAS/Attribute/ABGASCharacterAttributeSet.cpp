@@ -5,6 +5,7 @@
 
 #include "ArenaBattleGAS.h"
 #include "GameplayEffectExtension.h"
+#include "Tag/ABGameplayTag.h"
 
 UABGASCharacterAttributeSet::UABGASCharacterAttributeSet() :
     AttackRange(100.f),
@@ -52,5 +53,13 @@ void UABGASCharacterAttributeSet::PostGameplayEffectExecute(const FGameplayEffec
         UE_LOG(LogABGAS, Log, TEXT("Damage : %f"), GetDamage())
         SetHealth(GetHealth() - GetDamage());
         SetDamage(0.f);
+    }
+
+    // 죽음 처리
+    if(!bOutOfHealth && FMath::IsNearlyZero(GetHealth()))
+    {
+        Data.Target.AddLooseGameplayTag(ABGameplayTags::Character::State::Dead);
+        bOutOfHealth = true;
+        OnOutOfHealth.Broadcast();
     }
 }

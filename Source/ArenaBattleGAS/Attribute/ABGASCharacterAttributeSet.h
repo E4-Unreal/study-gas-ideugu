@@ -13,6 +13,8 @@
     GAMEPLAYATTRIBUTE_VALUE_SETTER(PropertyName) \
     GAMEPLAYATTRIBUTE_VALUE_INITTER(PropertyName)
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOutOfHealthDelegate);
+
 /**
  *
  */
@@ -31,6 +33,8 @@ public:
     ATTRIBUTE_ACCESSORS(ThisClass, Health)
     ATTRIBUTE_ACCESSORS(ThisClass, MaxHealth)
     ATTRIBUTE_ACCESSORS(ThisClass, Damage)
+
+    mutable FOutOfHealthDelegate OnOutOfHealth;
 
 protected:
     UPROPERTY(BlueprintReadOnly, Category = "Attack")
@@ -59,6 +63,8 @@ protected:
 
     UPROPERTY(BlueprintReadOnly, Category = "Health")
     FGameplayAttributeData Damage;
+
+    bool bOutOfHealth;
 
 public:
     UABGASCharacterAttributeSet();

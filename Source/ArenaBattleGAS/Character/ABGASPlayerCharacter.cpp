@@ -4,8 +4,8 @@
 
 #include "AbilitySystemComponent.h"
 #include "EnhancedInputComponent.h"
+#include "Attribute/ABGASCharacterAttributeSet.h"
 #include "Player/ABGASPlayerState.h"
-#include "UI/ABGASHealthBar.h"
 #include "UI/ABGASWidgetComponent.h"
 
 AABGASPlayerCharacter::AABGASPlayerCharacter()
@@ -40,6 +40,8 @@ void AABGASPlayerCharacter::PossessedBy(AController* NewController)
 
         // ASC 초기화
         AbilitySystem->InitAbilityActorInfo(PS, this);
+        const UABGASCharacterAttributeSet* CharacterAttributes = AbilitySystem->GetSet<UABGASCharacterAttributeSet>();
+        CharacterAttributes->OnOutOfHealth.AddDynamic(this, &ThisClass::OnOutOfHealthCallBack);
 
         // 기본 GA 부여
         for(const auto& DefaultAbility : DefaultAbilities)
@@ -75,4 +77,9 @@ void AABGASPlayerCharacter::SetupGasInputComponent()
         EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Completed, AbilitySystem.Get(), &UAbilitySystemComponent::ReleaseInputID, 0);
         EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Triggered, AbilitySystem.Get(), &UAbilitySystemComponent::PressInputID, 1);
     }
+}
+
+void AABGASPlayerCharacter::OnOutOfHealthCallBack()
+{
+    SetDead();
 }

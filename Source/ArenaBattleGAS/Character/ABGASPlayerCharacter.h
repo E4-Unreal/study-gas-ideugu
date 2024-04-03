@@ -37,6 +37,9 @@ public:
 protected:
     void SetupGasInputComponent();
 
+    UFUNCTION()
+    virtual void OnOutOfHealthCallBack();
+
 public:
     /* AbilitySystemInterface */
     FORCEINLINE virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override { return AbilitySystem.Get(); }

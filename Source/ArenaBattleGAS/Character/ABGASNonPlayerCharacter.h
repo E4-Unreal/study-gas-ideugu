@@ -37,6 +37,10 @@ public:
 
     virtual void PossessedBy(AController* NewController) override;
 
+protected:
+    UFUNCTION()
+    virtual void OnOutOfHealthCallBack();
+
 public:
     /* Getter */
     UFUNCTION(BlueprintGetter)
