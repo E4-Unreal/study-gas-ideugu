@@ -31,6 +31,9 @@ void UABGASCharacterAttributeSet::PreAttributeChange(const FGameplayAttribute& A
     else if(Attribute == GetDamageAttribute())
     {
         NewValue = FMath::Max(0.f, NewValue);
+
+        if(GetOwningAbilitySystemComponent()->HasMatchingGameplayTag(ABGameplayTags::Character::State::Invincible))
+            NewValue = 0;
     }
 }
 
@@ -38,6 +41,11 @@ void UABGASCharacterAttributeSet::PostAttributeChange(const FGameplayAttribute& 
     float NewValue)
 {
     Super::PostAttributeChange(Attribute, OldValue, NewValue);
+}
+
+bool UABGASCharacterAttributeSet::PreGameplayEffectExecute(FGameplayEffectModCallbackData& Data)
+{
+    return Super::PreGameplayEffectExecute(Data);
 }
 
 void UABGASCharacterAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data)

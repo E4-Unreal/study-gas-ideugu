@@ -8,6 +8,7 @@
 #include "AbilitySystemBlueprintLibrary.h"
 #include "Components/ProgressBar.h"
 #include "Components/TextBlock.h"
+#include "Tag/ABGameplayTag.h"
 
 void UABGASHealthBar::SetOwner(AActor* InOwner)
 {
@@ -15,6 +16,11 @@ void UABGASHealthBar::SetOwner(AActor* InOwner)
 
     UAbilitySystemComponent* LocalAbilitySystem = GetAbilitySystem();
     if(!LocalAbilitySystem) return;
+
+    // Invincible 태그 이벤트 등록
+    LocalAbilitySystem->RegisterGameplayTagEvent(ABGameplayTags::Character::State::Invincible)
+    .AddUObject(this, &ThisClass::OnInvincibleTagChanaged);
+    PbHpBar->SetFillColorAndOpacity(HealthColor);
 
     FGameplayAttribute HealthAttribute = UABGASCharacterAttributeSet::GetHealthAttribute();
     if(LocalAbilitySystem->HasAttributeSetForAttribute(HealthAttribute))
@@ -51,6 +57,11 @@ void UABGASHealthBar::OnMaxHealthChanged(const FOnAttributeChangeData& ChangeDat
 {
     CurrentMaxHealth = ChangeData.NewValue;
     UpdateHpBar();
+}
+
+void UABGASHealthBar::OnInvincibleTagChanaged(const FGameplayTag Tag, int32 NewCount)
+{
+    PbHpBar->SetFillColorAndOpacity(NewCount > 0 ? InvincibleColor : HealthColor);
 }
 
 void UABGASHealthBar::UpdateHpBar() const

@@ -33,6 +33,7 @@ namespace ABGameplayTags
             UE_DEFINE_GAMEPLAY_TAG(Jumping, "Character.State.Jumping")
             UE_DEFINE_GAMEPLAY_TAG(Attacking, "Character.State.Attacking")
             UE_DEFINE_GAMEPLAY_TAG(Dead, "Character.State.Dead")
+            UE_DEFINE_GAMEPLAY_TAG(Invincible, "Character.State.Invincible")
         }
     }
 }

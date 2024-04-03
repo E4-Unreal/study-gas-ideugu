@@ -28,11 +28,15 @@ protected:
     float CurrentHealth;
     float CurrentMaxHealth;
 
+    FLinearColor HealthColor = FLinearColor::Red;
+    FLinearColor InvincibleColor = FLinearColor::Blue;
+
 protected:
     virtual void SetOwner(AActor* InOwner) override;
 
     virtual void OnHealthChanged(const FOnAttributeChangeData& ChangeData);
     virtual void OnMaxHealthChanged(const FOnAttributeChangeData& ChangeData);
+    virtual void OnInvincibleTagChanaged(const FGameplayTag Tag, int32 NewCount);
 
     void UpdateHpBar() const;
 };
