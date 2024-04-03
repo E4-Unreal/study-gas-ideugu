@@ -2,7 +2,9 @@
 
 #include "ABTA_Trace.h"
 
+#include "AbilitySystemBlueprintLibrary.h"
 #include "Abilities/GameplayAbility.h"
+#include "Attribute/ABGASCharacterAttributeSet.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/Character.h"
 #include "Physics/ABCollision.h"
@@ -30,12 +32,21 @@ void AABTA_Trace::ConfirmTargetingAndContinue()
 
 FGameplayAbilityTargetDataHandle AABTA_Trace::MakeTargetData() const
 {
+    // AttackRange 값 가져오기
+    bool bFoundAttackRange;
+    const float AttackRange = UAbilitySystemBlueprintLibrary::GetFloatAttribute(SourceActor, UABGASCharacterAttributeSet::GetAttackRangeAttribute(), bFoundAttackRange);
+
+    // AttackRadius 값 가져오기
+    bool bFoundAttackRadius;
+    const float AttackRadius = UAbilitySystemBlueprintLibrary::GetFloatAttribute(SourceActor, UABGASCharacterAttributeSet::GetAttackRadiusAttribute(), bFoundAttackRadius);
+
+    // 유효성 검사
+    if(!(bFoundAttackRange && bFoundAttackRadius)) return FGameplayAbilityTargetDataHandle();
+
+    // 충돌 검사
     ACharacter* Character = CastChecked<ACharacter>(SourceActor);
 
     FHitResult OutHitResult;
-    const float AttackRange = 100.f;
-    const float AttackRadius = 50.f;
-
     FCollisionQueryParams CollisionQueryParams(SCENE_QUERY_STAT(UABTA_Trace), false, Character);
     const FVector Forward = Character->GetActorForwardVector();
     const FVector Start = Character->GetActorLocation() + Forward * Character->GetCapsuleComponent()->GetScaledCapsuleRadius();
