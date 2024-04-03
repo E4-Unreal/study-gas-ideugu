@@ -8,6 +8,7 @@
 #include "AT/ABAT_WaitForTrace.h"
 #include "Attribute/ABGASCharacterAttributeSet.h"
 #include "TA/ABTA_Trace.h"
+#include "Tag/ABGameplayTag.h"
 
 UABGA_AttackHitCheck::UABGA_AttackHitCheck()
 {
@@ -33,9 +34,12 @@ void UABGA_AttackHitCheck::OnTraceResultCallBack(const FGameplayAbilityTargetDat
 
         UE_LOG(LogTemp, Error, TEXT("Target %s Detected"), *(HitResult.GetActor()->GetName()))
 
+        const UABGASCharacterAttributeSet* SourceAttribute = GetAbilitySystemComponentFromActorInfo_Checked()->GetSet<UABGASCharacterAttributeSet>();
+
         FGameplayEffectSpecHandle EffectSpecHandle = MakeOutgoingGameplayEffectSpec(AttackDamageEffect);
         if(EffectSpecHandle.IsValid())
         {
+            EffectSpecHandle.Data->SetSetByCallerMagnitude(ABGameplayTags::Data::Damage, -SourceAttribute->GetAttackRate());
             ApplyGameplayEffectSpecToTarget(CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo, EffectSpecHandle, TargetDataHandle);
         }
     }
