@@ -18,6 +18,9 @@ protected:
     UPROPERTY(EditDefaultsOnly, Category = "Config")
     TSubclassOf<UGameplayEffect> AttackDamageEffect;
 
+    UPROPERTY(EditDefaultsOnly, Category = "Config")
+    TSubclassOf<UGameplayEffect> AttackBuffEffect;
+
     float CurrentLevel;
 
 public:
