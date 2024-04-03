@@ -7,6 +7,7 @@
 #include "Character/ABCharacterNonPlayer.h"
 #include "ABGASNonPlayerCharacter.generated.h"
 
+class UGameplayEffect;
 class UABGASCharacterAttributeSet;
 
 UCLASS()
@@ -19,6 +20,13 @@ class ARENABATTLEGAS_API AABGASNonPlayerCharacter : public AABCharacterNonPlayer
 
     UPROPERTY()
     TObjectPtr<UABGASCharacterAttributeSet> CharacterAttributeSet;
+
+protected:
+    UPROPERTY(EditAnywhere, Category = "Config")
+    TSubclassOf<UGameplayEffect> CharacterAttributeSetEffect;
+
+    UPROPERTY(EditAnywhere, Category = "Config")
+    float Level;
 
 public:
     AABGASNonPlayerCharacter();
