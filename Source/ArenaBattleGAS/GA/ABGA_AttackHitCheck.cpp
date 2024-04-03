@@ -45,6 +45,12 @@ void UABGA_AttackHitCheck::OnTraceResultCallBack(const FGameplayAbilityTargetDat
             EffectSpecHandle.Data->SetSetByCallerMagnitude(ABGameplayTags::Data::Damage, -SourceAttribute->GetAttackRate());
             ApplyGameplayEffectSpecToTarget(CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo, EffectSpecHandle, TargetDataHandle);
         }
+
+        FGameplayEffectSpecHandle BuffEffectSpecHandle = MakeOutgoingGameplayEffectSpec(AttackBuffEffect, CurrentLevel);
+        if(BuffEffectSpecHandle.IsValid())
+        {
+            ApplyGameplayEffectSpecToOwner(CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo, BuffEffectSpecHandle);
+        }
     }
 
     bool bReplicatedEndAbility = true;

@@ -5,6 +5,7 @@
 
 #include "ArenaBattleGAS.h"
 #include "GameplayEffectExtension.h"
+#include "Tag/ABGameplayTag.h"
 
 UABGASCharacterAttributeSet::UABGASCharacterAttributeSet() :
     AttackRange(100.f),
@@ -30,6 +31,9 @@ void UABGASCharacterAttributeSet::PreAttributeChange(const FGameplayAttribute& A
     else if(Attribute == GetDamageAttribute())
     {
         NewValue = FMath::Max(0.f, NewValue);
+
+        if(GetOwningAbilitySystemComponent()->HasMatchingGameplayTag(ABGameplayTags::Character::State::Invincible))
+            NewValue = 0;
     }
 }
 
@@ -37,6 +41,11 @@ void UABGASCharacterAttributeSet::PostAttributeChange(const FGameplayAttribute& 
     float NewValue)
 {
     Super::PostAttributeChange(Attribute, OldValue, NewValue);
+}
+
+bool UABGASCharacterAttributeSet::PreGameplayEffectExecute(FGameplayEffectModCallbackData& Data)
+{
+    return Super::PreGameplayEffectExecute(Data);
 }
 
 void UABGASCharacterAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data)
@@ -52,5 +61,13 @@ void UABGASCharacterAttributeSet::PostGameplayEffectExecute(const FGameplayEffec
         UE_LOG(LogABGAS, Log, TEXT("Damage : %f"), GetDamage())
         SetHealth(GetHealth() - GetDamage());
         SetDamage(0.f);
+    }
+
+    // 죽음 처리
+    if(!bOutOfHealth && FMath::IsNearlyZero(GetHealth()))
+    {
+        Data.Target.AddLooseGameplayTag(ABGameplayTags::Character::State::Dead);
+        bOutOfHealth = true;
+        OnOutOfHealth.Broadcast();
     }
 }

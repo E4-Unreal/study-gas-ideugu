@@ -4,7 +4,9 @@
 
 #include "AbilitySystemComponent.h"
 #include "EnhancedInputComponent.h"
+#include "Attribute/ABGASCharacterAttributeSet.h"
 #include "Player/ABGASPlayerState.h"
+#include "UI/ABGASWidgetComponent.h"
 
 AABGASPlayerCharacter::AABGASPlayerCharacter()
 {
@@ -12,6 +14,18 @@ AABGASPlayerCharacter::AABGASPlayerCharacter()
     if (ComboActionMontageRef.Object)
     {
     	ComboActionMontage = ComboActionMontageRef.Object;
+    }
+
+    HpBar = CreateDefaultSubobject<UABGASWidgetComponent>(TEXT("HpBar"));
+    HpBar->SetupAttachment(GetMesh());
+    HpBar->SetRelativeLocation(FVector(0.f, 0.f, 180.f));
+    static ConstructorHelpers::FClassFinder<UUserWidget> HpBarWidgetRef(TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/ArenaBattle/UI/WBP_HpBar.WBP_HpBar_C'"));
+    if(HpBarWidgetRef.Class)
+    {
+        HpBar->SetWidgetClass(HpBarWidgetRef.Class);
+        HpBar->SetWidgetSpace(EWidgetSpace::Screen);
+        HpBar->SetDrawSize(FVector2D(200.f, 20.f));
+        HpBar->SetCollisionEnabled(ECollisionEnabled::NoCollision);
     }
 }
 
@@ -26,6 +40,8 @@ void AABGASPlayerCharacter::PossessedBy(AController* NewController)
 
         // ASC 초기화
         AbilitySystem->InitAbilityActorInfo(PS, this);
+        const UABGASCharacterAttributeSet* CharacterAttributes = AbilitySystem->GetSet<UABGASCharacterAttributeSet>();
+        CharacterAttributes->OnOutOfHealth.AddDynamic(this, &ThisClass::OnOutOfHealthCallBack);
 
         // 기본 GA 부여
         for(const auto& DefaultAbility : DefaultAbilities)
@@ -61,4 +77,9 @@ void AABGASPlayerCharacter::SetupGasInputComponent()
         EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Completed, AbilitySystem.Get(), &UAbilitySystemComponent::ReleaseInputID, 0);
         EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Triggered, AbilitySystem.Get(), &UAbilitySystemComponent::PressInputID, 1);
     }
+}
+
+void AABGASPlayerCharacter::OnOutOfHealthCallBack()
+{
+    SetDead();
 }

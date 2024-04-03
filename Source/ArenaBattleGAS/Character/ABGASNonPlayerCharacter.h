@@ -9,6 +9,7 @@
 
 class UGameplayEffect;
 class UABGASCharacterAttributeSet;
+class UABGASWidgetComponent;
 
 UCLASS()
 class ARENABATTLEGAS_API AABGASNonPlayerCharacter : public AABCharacterNonPlayer, public IAbilitySystemInterface
@@ -21,6 +22,9 @@ class ARENABATTLEGAS_API AABGASNonPlayerCharacter : public AABCharacterNonPlayer
     UPROPERTY()
     TObjectPtr<UABGASCharacterAttributeSet> CharacterAttributeSet;
 
+    UPROPERTY(VisibleAnywhere, Category = "Component")
+    TObjectPtr<UABGASWidgetComponent> HpBar;
+
 protected:
     UPROPERTY(EditAnywhere, Category = "Config")
     TSubclassOf<UGameplayEffect> CharacterAttributeSetEffect;
@@ -32,6 +36,10 @@ public:
     AABGASNonPlayerCharacter();
 
     virtual void PossessedBy(AController* NewController) override;
+
+protected:
+    UFUNCTION()
+    virtual void OnOutOfHealthCallBack();
 
 public:
     /* Getter */
