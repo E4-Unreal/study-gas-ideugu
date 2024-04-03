@@ -5,7 +5,8 @@
 #include "AbilitySystemComponent.h"
 #include "Attribute/ABGASCharacterAttributeSet.h"
 
-AABGASNonPlayerCharacter::AABGASNonPlayerCharacter()
+AABGASNonPlayerCharacter::AABGASNonPlayerCharacter() :
+    Level(1.f)
 {
     AbilitySystem = CreateDefaultSubobject<UAbilitySystemComponent>(TEXT("AbilitySystem"));
     CharacterAttributeSet = CreateDefaultSubobject<UABGASCharacterAttributeSet>(TEXT("CharacterAttributeSet"));
@@ -17,4 +18,13 @@ void AABGASNonPlayerCharacter::PossessedBy(AController* NewController)
 
     // ASC 초기화
     AbilitySystem->InitAbilityActorInfo(this, this);
+
+    FGameplayEffectContextHandle EffectContextHandle = AbilitySystem->MakeEffectContext();
+    EffectContextHandle.AddSourceObject(this);
+    FGameplayEffectSpecHandle EffectSpecHandle = AbilitySystem->MakeOutgoingSpec(CharacterAttributeSetEffect, Level, EffectContextHandle);
+
+    if(EffectSpecHandle.IsValid())
+    {
+        AbilitySystem->ApplyGameplayEffectSpecToSelf(*EffectSpecHandle.Data.Get());
+    }
 }

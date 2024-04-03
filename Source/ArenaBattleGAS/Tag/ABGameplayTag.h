@@ -4,6 +4,11 @@
 
 namespace ABGameplayTags
 {
+    namespace Data
+    {
+        UE_DECLARE_GAMEPLAY_TAG_EXTERN(Damage)
+    }
+
     namespace Actor
     {
         namespace Action

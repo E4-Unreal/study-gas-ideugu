@@ -30,6 +30,7 @@ public:
     ATTRIBUTE_ACCESSORS(ThisClass, MaxAttackRate)
     ATTRIBUTE_ACCESSORS(ThisClass, Health)
     ATTRIBUTE_ACCESSORS(ThisClass, MaxHealth)
+    ATTRIBUTE_ACCESSORS(ThisClass, Damage)
 
 protected:
     UPROPERTY(BlueprintReadOnly, Category = "Attack")
@@ -56,9 +57,13 @@ protected:
     UPROPERTY(BlueprintReadOnly, Category = "Health")
     FGameplayAttributeData MaxHealth;
 
+    UPROPERTY(BlueprintReadOnly, Category = "Health")
+    FGameplayAttributeData Damage;
+
 public:
     UABGASCharacterAttributeSet();
 
     virtual void PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue) override;
     virtual void PostAttributeChange(const FGameplayAttribute& Attribute, float OldValue, float NewValue) override;
+    virtual void PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data) override;
 };

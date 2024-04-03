@@ -8,6 +8,7 @@
 #include "AT/ABAT_WaitForTrace.h"
 #include "Attribute/ABGASCharacterAttributeSet.h"
 #include "TA/ABTA_Trace.h"
+#include "Tag/ABGameplayTag.h"
 
 UABGA_AttackHitCheck::UABGA_AttackHitCheck()
 {
@@ -19,6 +20,9 @@ void UABGA_AttackHitCheck::ActivateAbility(const FGameplayAbilitySpecHandle Hand
     const FGameplayEventData* TriggerEventData)
 {
     Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
+
+    // 콤보 공격 레벨 지정
+    CurrentLevel = TriggerEventData->EventMagnitude;
 
     UABAT_WaitForTrace* WaitForTraceTask = UABAT_WaitForTrace::CreateTask(this, AABTA_Trace::StaticClass());
     WaitForTraceTask->OnComplete.AddDynamic(this, &ThisClass::OnTraceResultCallBack);
@@ -33,18 +37,14 @@ void UABGA_AttackHitCheck::OnTraceResultCallBack(const FGameplayAbilityTargetDat
 
         UE_LOG(LogTemp, Error, TEXT("Target %s Detected"), *(HitResult.GetActor()->GetName()))
 
-        // ASC 가져오기
-        UAbilitySystemComponent* SourceASC = GetAbilitySystemComponentFromActorInfo_Checked();
-        UAbilitySystemComponent* TargetASC = UAbilitySystemGlobals::GetAbilitySystemComponentFromActor(HitResult.GetActor());
-        if(!TargetASC) return;
+        const UABGASCharacterAttributeSet* SourceAttribute = GetAbilitySystemComponentFromActorInfo_Checked()->GetSet<UABGASCharacterAttributeSet>();
 
-        // Attribute 가져오기
-        const UABGASCharacterAttributeSet* SourceAttribute = SourceASC->GetSet<UABGASCharacterAttributeSet>();
-        UABGASCharacterAttributeSet* TargetAttribute = const_cast<UABGASCharacterAttributeSet*>(TargetASC->GetSet<UABGASCharacterAttributeSet>());
-        if(!SourceAttribute || !TargetAttribute) return;
-
-        const float AttackDamage = SourceAttribute->GetAttackRate();
-        TargetAttribute->SetHealth(TargetAttribute->GetHealth() - AttackDamage);
+        FGameplayEffectSpecHandle EffectSpecHandle = MakeOutgoingGameplayEffectSpec(AttackDamageEffect, CurrentLevel);
+        if(EffectSpecHandle.IsValid())
+        {
+            EffectSpecHandle.Data->SetSetByCallerMagnitude(ABGameplayTags::Data::Damage, -SourceAttribute->GetAttackRate());
+            ApplyGameplayEffectSpecToTarget(CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo, EffectSpecHandle, TargetDataHandle);
+        }
     }
 
     bool bReplicatedEndAbility = true;

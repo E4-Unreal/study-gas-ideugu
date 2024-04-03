@@ -3,6 +3,11 @@
 
 namespace ABGameplayTags
 {
+    namespace Data
+    {
+        UE_DEFINE_GAMEPLAY_TAG(Damage, "Data.Damage")
+    }
+
     namespace Actor
     {
         namespace Action
