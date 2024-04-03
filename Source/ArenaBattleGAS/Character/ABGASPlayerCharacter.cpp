@@ -5,6 +5,8 @@
 #include "AbilitySystemComponent.h"
 #include "EnhancedInputComponent.h"
 #include "Player/ABGASPlayerState.h"
+#include "UI/ABGASHealthBar.h"
+#include "UI/ABGASWidgetComponent.h"
 
 AABGASPlayerCharacter::AABGASPlayerCharacter()
 {
@@ -12,6 +14,18 @@ AABGASPlayerCharacter::AABGASPlayerCharacter()
     if (ComboActionMontageRef.Object)
     {
     	ComboActionMontage = ComboActionMontageRef.Object;
+    }
+
+    HpBar = CreateDefaultSubobject<UABGASWidgetComponent>(TEXT("HpBar"));
+    HpBar->SetupAttachment(GetMesh());
+    HpBar->SetRelativeLocation(FVector(0.f, 0.f, 180.f));
+    static ConstructorHelpers::FClassFinder<UUserWidget> HpBarWidgetRef(TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/ArenaBattle/UI/WBP_HpBar.WBP_HpBar_C'"));
+    if(HpBarWidgetRef.Class)
+    {
+        HpBar->SetWidgetClass(HpBarWidgetRef.Class);
+        HpBar->SetWidgetSpace(EWidgetSpace::Screen);
+        HpBar->SetDrawSize(FVector2D(200.f, 20.f));
+        HpBar->SetCollisionEnabled(ECollisionEnabled::NoCollision);
     }
 }
 

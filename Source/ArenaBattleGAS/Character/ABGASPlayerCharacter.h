@@ -7,6 +7,7 @@
 #include "Character/ABCharacterPlayer.h"
 #include "ABGASPlayerCharacter.generated.h"
 
+class UABGASWidgetComponent;
 class UAbilitySystemComponent;
 class UGameplayAbility;
 
@@ -16,6 +17,9 @@ class ARENABATTLEGAS_API AABGASPlayerCharacter : public AABCharacterPlayer, publ
     GENERATED_BODY()
 
     TWeakObjectPtr<UAbilitySystemComponent> AbilitySystem;
+
+    UPROPERTY(VisibleAnywhere, Category = "Component")
+    TObjectPtr<UABGASWidgetComponent> HpBar;
 
 protected:
     UPROPERTY(EditAnywhere, Category = "Config")

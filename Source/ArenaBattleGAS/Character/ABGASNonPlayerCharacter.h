@@ -9,6 +9,7 @@
 
 class UGameplayEffect;
 class UABGASCharacterAttributeSet;
+class UABGASWidgetComponent;
 
 UCLASS()
 class ARENABATTLEGAS_API AABGASNonPlayerCharacter : public AABCharacterNonPlayer, public IAbilitySystemInterface
@@ -20,6 +21,9 @@ class ARENABATTLEGAS_API AABGASNonPlayerCharacter : public AABCharacterNonPlayer
 
     UPROPERTY()
     TObjectPtr<UABGASCharacterAttributeSet> CharacterAttributeSet;
+
+    UPROPERTY(VisibleAnywhere, Category = "Component")
+    TObjectPtr<UABGASWidgetComponent> HpBar;
 
 protected:
     UPROPERTY(EditAnywhere, Category = "Config")
