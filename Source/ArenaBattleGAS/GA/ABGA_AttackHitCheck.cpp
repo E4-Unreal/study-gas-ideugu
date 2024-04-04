@@ -24,7 +24,7 @@ void UABGA_AttackHitCheck::ActivateAbility(const FGameplayAbilitySpecHandle Hand
     // 콤보 공격 레벨 지정
     CurrentLevel = TriggerEventData->EventMagnitude;
 
-    UABAT_WaitForTrace* WaitForTraceTask = UABAT_WaitForTrace::CreateTask(this, AABTA_Trace::StaticClass());
+    UABAT_WaitForTrace* WaitForTraceTask = UABAT_WaitForTrace::CreateTask(this, TargetActorClass);
     WaitForTraceTask->OnComplete.AddDynamic(this, &ThisClass::OnTraceResultCallBack);
     WaitForTraceTask->ReadyForActivation();
 }
@@ -61,6 +61,25 @@ void UABGA_AttackHitCheck::OnTraceResultCallBack(const FGameplayAbilityTargetDat
         if(BuffEffectSpecHandle.IsValid())
         {
             ApplyGameplayEffectSpecToOwner(CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo, BuffEffectSpecHandle);
+        }
+    }
+    else if(UAbilitySystemBlueprintLibrary::TargetDataHasActor(TargetDataHandle, 0))
+    {
+        UAbilitySystemComponent* SourceASC = GetAbilitySystemComponentFromActorInfo_Checked();
+
+        // 데미지
+        FGameplayEffectSpecHandle EffectSpecHandle = MakeOutgoingGameplayEffectSpec(AttackDamageEffect, CurrentLevel);
+        if(EffectSpecHandle.IsValid())
+        {
+            ApplyGameplayEffectSpecToTarget(CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo, EffectSpecHandle, TargetDataHandle);
+
+            // Cue
+            FGameplayEffectContextHandle CueContextHandle = MakeEffectContext(CurrentSpecHandle, CurrentActorInfo);
+            CueContextHandle.AddActors(TargetDataHandle.Data[0].Get()->GetActors(), false);
+            FGameplayCueParameters CueParameters;
+            CueParameters.EffectContext = CueContextHandle;
+
+            SourceASC->ExecuteGameplayCue(ABGameplayTags::GameplayCue::Character::AttackHit, CueParameters);
         }
     }
 

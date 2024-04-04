@@ -37,6 +37,12 @@ AABGASPlayerCharacter::AABGASPlayerCharacter()
 
     WeaponRange = 75.f;
     WeaponRate = 100.f;
+
+    static ConstructorHelpers::FObjectFinder<UAnimMontage> SkillMontageRef(TEXT("/Script/Engine.AnimMontage'/Game/ArenaBattleGAS/Animation/AM_SkillAttack.AM_SkillAttack'"));
+    if(SkillMontageRef.Object)
+    {
+        SkillMontage = SkillMontageRef.Object;
+    }
 }
 
 void AABGASPlayerCharacter::PossessedBy(AController* NewController)
@@ -93,6 +99,7 @@ void AABGASPlayerCharacter::SetupGasInputComponent()
         EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Triggered, AbilitySystem.Get(), &UAbilitySystemComponent::PressInputID, 0);
         EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Completed, AbilitySystem.Get(), &UAbilitySystemComponent::ReleaseInputID, 0);
         EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Triggered, AbilitySystem.Get(), &UAbilitySystemComponent::PressInputID, 1);
+        EnhancedInputComponent->BindAction(SkillAction, ETriggerEvent::Triggered, AbilitySystem.Get(), &UAbilitySystemComponent::PressInputID, 2);
     }
 }
 
@@ -107,6 +114,13 @@ void AABGASPlayerCharacter::EquipWeaponCallback(const FGameplayEventData* EventD
     {
         Weapon->SetSkeletalMesh(WeaponMesh);
 
+        FGameplayAbilitySpec NewSkillSpec(SkillAbilityClass);
+        NewSkillSpec.InputID = 2;
+        if(!AbilitySystem->FindAbilitySpecFromClass(SkillAbilityClass))
+        {
+            AbilitySystem->GiveAbility(NewSkillSpec);
+        }
+
         const float CurrentAttackRange = AbilitySystem->GetNumericAttributeBase(UABGASCharacterAttributeSet::GetAttackRangeAttribute());
         const float CurrentAttackRate = AbilitySystem->GetNumericAttributeBase(UABGASCharacterAttributeSet::GetAttackRateAttribute());
 
@@ -120,6 +134,12 @@ void AABGASPlayerCharacter::UnequipWeaponCallback(const FGameplayEventData* Even
     if(Weapon)
     {
         Weapon->SetSkeletalMesh(nullptr);
+
+        FGameplayAbilitySpec* SkillAbilitySpec = AbilitySystem->FindAbilitySpecFromClass(SkillAbilityClass);
+        if(SkillAbilitySpec)
+        {
+            AbilitySystem->ClearAbility(SkillAbilitySpec->Handle);
+        }
 
         const float CurrentAttackRange = AbilitySystem->GetNumericAttributeBase(UABGASCharacterAttributeSet::GetAttackRangeAttribute());
         const float CurrentAttackRate = AbilitySystem->GetNumericAttributeBase(UABGASCharacterAttributeSet::GetAttackRateAttribute());
