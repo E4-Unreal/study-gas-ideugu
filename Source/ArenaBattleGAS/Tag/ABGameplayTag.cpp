@@ -42,6 +42,7 @@ namespace ABGameplayTags
         namespace Character
         {
             UE_DEFINE_GAMEPLAY_TAG(AttackHit, "GameplayCue.Character.AttackHit")
+            UE_DEFINE_GAMEPLAY_TAG(Damage, "GameplayCue.Character.Damage")
         }
 
         namespace Chest

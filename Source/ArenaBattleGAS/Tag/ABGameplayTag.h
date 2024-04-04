@@ -43,6 +43,7 @@ namespace ABGameplayTags
         namespace Character
         {
             UE_DECLARE_GAMEPLAY_TAG_EXTERN(AttackHit)
+            UE_DECLARE_GAMEPLAY_TAG_EXTERN(Damage)
         }
 
         namespace Chest
