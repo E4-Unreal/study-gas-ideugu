@@ -7,6 +7,7 @@
 #include "Character/ABCharacterPlayer.h"
 #include "ABGASPlayerCharacter.generated.h"
 
+struct FGameplayEventData;
 class UABGASWidgetComponent;
 class UAbilitySystemComponent;
 class UGameplayAbility;
@@ -28,6 +29,15 @@ protected:
     UPROPERTY(EditAnywhere, Category = "Config")
     TMap<int32, TSubclassOf<UGameplayAbility>> DefaultInputAbilities;
 
+    UPROPERTY(EditAnywhere, Category = "Config")
+    TObjectPtr<USkeletalMesh> WeaponMesh;
+
+    UPROPERTY(EditAnywhere, Category = "Config")
+    float WeaponRange;
+
+    UPROPERTY(EditAnywhere, Category = "Config")
+    float WeaponRate;
+
 public:
     AABGASPlayerCharacter();
 
@@ -39,6 +49,9 @@ protected:
 
     UFUNCTION()
     virtual void OnOutOfHealthCallBack();
+
+    void EquipWeaponCallback(const FGameplayEventData* EventData);
+    void UnequipWeaponCallback(const FGameplayEventData* EventData);
 
 public:
     /* AbilitySystemInterface */

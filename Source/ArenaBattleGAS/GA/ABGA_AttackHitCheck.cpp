@@ -39,13 +39,24 @@ void UABGA_AttackHitCheck::OnTraceResultCallBack(const FGameplayAbilityTargetDat
 
         const UABGASCharacterAttributeSet* SourceAttribute = GetAbilitySystemComponentFromActorInfo_Checked()->GetSet<UABGASCharacterAttributeSet>();
 
+        // 데미지
         FGameplayEffectSpecHandle EffectSpecHandle = MakeOutgoingGameplayEffectSpec(AttackDamageEffect, CurrentLevel);
         if(EffectSpecHandle.IsValid())
         {
             EffectSpecHandle.Data->SetSetByCallerMagnitude(ABGameplayTags::Data::Damage, -SourceAttribute->GetAttackRate());
             ApplyGameplayEffectSpecToTarget(CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo, EffectSpecHandle, TargetDataHandle);
+
+            // Cue
+            FGameplayEffectContextHandle CueContextHandle = MakeEffectContext(CurrentSpecHandle, CurrentActorInfo);
+            CueContextHandle.AddHitResult(HitResult);
+            FGameplayCueParameters CueParameters;
+            CueParameters.EffectContext = CueContextHandle;
+
+            UAbilitySystemComponent* TargetSystem = UAbilitySystemGlobals::GetAbilitySystemComponentFromActor(HitResult.GetActor());
+            TargetSystem->ExecuteGameplayCue(ABGameplayTags::GameplayCue::Character::AttackHit, CueParameters);
         }
 
+        // 버프
         FGameplayEffectSpecHandle BuffEffectSpecHandle = MakeOutgoingGameplayEffectSpec(AttackBuffEffect, CurrentLevel);
         if(BuffEffectSpecHandle.IsValid())
         {

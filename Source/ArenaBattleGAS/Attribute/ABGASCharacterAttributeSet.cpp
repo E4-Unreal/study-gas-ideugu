@@ -9,10 +9,10 @@
 
 UABGASCharacterAttributeSet::UABGASCharacterAttributeSet() :
     AttackRange(100.f),
-    AttackRadius(50.f),
-    AttackRate(30.f),
     MaxAttackRange(300.f),
+    AttackRadius(50.f),
     MaxAttackRadius(150.f),
+    AttackRate(30.f),
     MaxAttackRate(100.f),
     MaxHealth(100.f),
     Damage(0.f)
