@@ -50,4 +50,16 @@ namespace ABGameplayTags
             UE_DEFINE_GAMEPLAY_TAG(Open, "GameplayCue.Chest.Open")
         }
     }
+
+    namespace Event
+    {
+        namespace Character
+        {
+            namespace Weapon
+            {
+                UE_DEFINE_GAMEPLAY_TAG(Equip, "Event.Character.Weapon.Equip")
+                UE_DEFINE_GAMEPLAY_TAG(Unequip, "Event.Character.Weapon.Unequip")
+            }
+        }
+    }
 }

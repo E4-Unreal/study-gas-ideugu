@@ -51,4 +51,16 @@ namespace ABGameplayTags
             UE_DECLARE_GAMEPLAY_TAG_EXTERN(Open)
         }
     }
+
+    namespace Event
+    {
+        namespace Character
+        {
+            namespace Weapon
+            {
+                UE_DECLARE_GAMEPLAY_TAG_EXTERN(Equip)
+                UE_DECLARE_GAMEPLAY_TAG_EXTERN(Unequip)
+            }
+        }
+    }
 }
