@@ -37,4 +37,12 @@ namespace ABGameplayTags
             UE_DECLARE_GAMEPLAY_TAG_EXTERN(Invincible)
         }
     }
+
+    namespace GameplayCue
+    {
+        namespace Character
+        {
+            UE_DECLARE_GAMEPLAY_TAG_EXTERN(AttackHit)
+        }
+    }
 }

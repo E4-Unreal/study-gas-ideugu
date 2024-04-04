@@ -36,4 +36,12 @@ namespace ABGameplayTags
             UE_DEFINE_GAMEPLAY_TAG(Invincible, "Character.State.Invincible")
         }
     }
+
+    namespace GameplayCue
+    {
+        namespace Character
+        {
+            UE_DEFINE_GAMEPLAY_TAG(AttackHit, "GameplayCue.Character.AttackHit")
+        }
+    }
 }
