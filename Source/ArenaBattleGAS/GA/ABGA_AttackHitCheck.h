@@ -6,6 +6,8 @@
 #include "Abilities/GameplayAbility.h"
 #include "ABGA_AttackHitCheck.generated.h"
 
+class AABTA_Trace;
+
 /**
  *
  */
@@ -22,6 +24,9 @@ protected:
     TSubclassOf<UGameplayEffect> AttackBuffEffect;
 
     float CurrentLevel;
+
+    UPROPERTY(EditDefaultsOnly, Category = "Config")
+    TSubclassOf<AABTA_Trace> TargetActorClass;
 
 public:
     UABGA_AttackHitCheck();

@@ -23,11 +23,6 @@ namespace ABGameplayTags
 
     namespace Character
     {
-        namespace Action
-        {
-            UE_DEFINE_GAMEPLAY_TAG(AttackHitCheck, "Character.Action.AttackHitCheck")
-        }
-
         namespace State
         {
             UE_DEFINE_GAMEPLAY_TAG(Jumping, "Character.State.Jumping")
@@ -59,6 +54,12 @@ namespace ABGameplayTags
             {
                 UE_DEFINE_GAMEPLAY_TAG(Equip, "Event.Character.Weapon.Equip")
                 UE_DEFINE_GAMEPLAY_TAG(Unequip, "Event.Character.Weapon.Unequip")
+            }
+
+            namespace HitCheck
+            {
+                UE_DEFINE_GAMEPLAY_TAG(Attack, "Event.Character.HitCheck.Attack")
+                UE_DEFINE_GAMEPLAY_TAG(Skill, "Event.Character.HitCheck.Skill")
             }
         }
     }

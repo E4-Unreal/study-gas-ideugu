@@ -38,6 +38,12 @@ protected:
     UPROPERTY(EditAnywhere, Category = "Config")
     float WeaponRate;
 
+    UPROPERTY(EditAnywhere, Category = "Config")
+    TSubclassOf<UGameplayAbility> SkillAbilityClass;
+
+    UPROPERTY(EditAnywhere, BlueprintGetter = GetSkillAnimMontage, Category = "Config")
+    TObjectPtr<UAnimMontage> SkillMontage;
+
 public:
     AABGASPlayerCharacter();
 
@@ -52,6 +58,10 @@ protected:
 
     void EquipWeaponCallback(const FGameplayEventData* EventData);
     void UnequipWeaponCallback(const FGameplayEventData* EventData);
+
+public:
+    UFUNCTION(BlueprintGetter)
+    virtual FORCEINLINE UAnimMontage* GetSkillAnimMontage() const { return SkillMontage; }
 
 public:
     /* AbilitySystemInterface */

@@ -24,11 +24,6 @@ namespace ABGameplayTags
 
     namespace Character
     {
-        namespace Action
-        {
-            UE_DECLARE_GAMEPLAY_TAG_EXTERN(AttackHitCheck)
-        }
-
         namespace State
         {
             UE_DECLARE_GAMEPLAY_TAG_EXTERN(Jumping)
@@ -60,6 +55,12 @@ namespace ABGameplayTags
             {
                 UE_DECLARE_GAMEPLAY_TAG_EXTERN(Equip)
                 UE_DECLARE_GAMEPLAY_TAG_EXTERN(Unequip)
+            }
+
+            namespace HitCheck
+            {
+                UE_DECLARE_GAMEPLAY_TAG_EXTERN(Attack)
+                UE_DECLARE_GAMEPLAY_TAG_EXTERN(Skill)
             }
         }
     }
