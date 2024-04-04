@@ -64,4 +64,12 @@ namespace ABGameplayTags
             }
         }
     }
+
+    namespace Cooldown
+    {
+        namespace Character
+        {
+            UE_DECLARE_GAMEPLAY_TAG_EXTERN(Skill)
+        }
+    }
 }

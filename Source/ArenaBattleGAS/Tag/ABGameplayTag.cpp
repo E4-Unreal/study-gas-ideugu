@@ -63,4 +63,12 @@ namespace ABGameplayTags
             }
         }
     }
+
+    namespace Cooldown
+    {
+        namespace Character
+        {
+            UE_DEFINE_GAMEPLAY_TAG(Skill, "Cooldown.Character.Skill")
+        }
+    }
 }

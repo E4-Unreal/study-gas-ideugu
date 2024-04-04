@@ -22,6 +22,8 @@ void UABGA_Skill::ActivateAbility(const FGameplayAbilitySpecHandle Handle, const
     ActiveSkillActionMontage = Character->GetSkillAnimMontage();
     if(!ActiveSkillActionMontage) return;
 
+    CommitAbility(CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo);
+
     Character->GetCharacterMovement()->SetMovementMode(MOVE_None);
 
     UAbilityTask_PlayMontageAndWait* PlayMontageTask = UAbilityTask_PlayMontageAndWait::CreatePlayMontageAndWaitProxy(this, TEXT("Skill"), ActiveSkillActionMontage);

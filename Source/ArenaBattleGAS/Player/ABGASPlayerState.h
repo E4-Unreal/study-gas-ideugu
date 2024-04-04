@@ -7,6 +7,7 @@
 #include "GameFramework/PlayerState.h"
 #include "ABGASPlayerState.generated.h"
 
+class UABCharacterSkillAttributeSet;
 class UAbilitySystemComponent;
 class UABGASCharacterAttributeSet;
 
@@ -23,6 +24,9 @@ class ARENABATTLEGAS_API AABGASPlayerState : public APlayerState, public IAbilit
 
     UPROPERTY()
     TObjectPtr<UABGASCharacterAttributeSet> CharacterAttributeSet;
+
+    UPROPERTY()
+    TObjectPtr<UABCharacterSkillAttributeSet> CharacterSkillAttributeSet;
 
 public:
     AABGASPlayerState();
