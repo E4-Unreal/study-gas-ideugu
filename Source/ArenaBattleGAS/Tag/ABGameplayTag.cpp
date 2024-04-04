@@ -43,5 +43,10 @@ namespace ABGameplayTags
         {
             UE_DEFINE_GAMEPLAY_TAG(AttackHit, "GameplayCue.Character.AttackHit")
         }
+
+        namespace Chest
+        {
+            UE_DEFINE_GAMEPLAY_TAG(Open, "GameplayCue.Chest.Open")
+        }
     }
 }

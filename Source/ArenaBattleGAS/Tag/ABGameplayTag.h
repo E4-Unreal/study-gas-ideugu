@@ -44,5 +44,10 @@ namespace ABGameplayTags
         {
             UE_DECLARE_GAMEPLAY_TAG_EXTERN(AttackHit)
         }
+
+        namespace Chest
+        {
+            UE_DECLARE_GAMEPLAY_TAG_EXTERN(Open)
+        }
     }
 }
